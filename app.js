@@ -1,12 +1,22 @@
 // Requires ( importacion de librerias de terceros o personalizadas )
 var express = require('express'); // Servidor Express
 var mongoose = require('mongoose'); // Libreria para conectar con DB Mongoose
+var bodyParser = require('body-parser') // Midelware para hacer post
 
+// Importar Rutas
+var appRoutes = require('./routes/app'); 
+var usuarioRoutes = require('./routes/usuario');
+var loginRoutes = require('./routes/login');
 
 
 // Inizializar variables
 var app = express(); // Defino mi servidor Express
 
+
+
+// Body Parser
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 
 // Conexion a DB
@@ -19,14 +29,9 @@ mongoose.connection.openUri('mongodb://localhost:27017/hospitalDB', ( err, res )
 
 
 // Rutas
-app.get('/', (req, res, next) => {
-
-    res.status(200).json({
-        ok: true,
-        mensaje: 'Peticion realizada correctamente'
-    });
-
-});
+app.use('/usuario', usuarioRoutes);
+app.use('/login', loginRoutes);
+app.use('/', appRoutes);
 
 
 
